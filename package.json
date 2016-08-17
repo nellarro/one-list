@@ -1,6 +1,7 @@
 {
   "name": "one-list",
   "version": "0.0.1",
+  "homepage": "https://nellarro.github.io/one-list",
   "private": true,
   "devDependencies": {
     "react-scripts": "0.2.1"
