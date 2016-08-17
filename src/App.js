@@ -3,7 +3,7 @@ import List from './List'
 import Input from './Input'
 import logo from './logo.svg'
 
-const TOKEN = 'illustriousvoyage'
+const TOKEN = 'tolkien'
 
 class App extends Component {
 
@@ -44,7 +44,20 @@ class App extends Component {
 
   completeItem = (index) => {
     const newListItems = this.state.listItems
-    newListItems[index].complete = !newListItems[index].complete
+    const item =newListItems[index]
+    fetch(`https://one-list-api.herokuapp.com/items/${item.id}?access_token=${TOKEN}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        item: {
+          complete: `${!item.complete}`
+        }
+      })
+    })
+    .then((response) => { return response.json() })
+    .then((data) => {
+      newListItems[index] = data
+
     this.setState({
       listItems: newListItems
     })
