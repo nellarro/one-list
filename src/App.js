@@ -3,7 +3,7 @@ import List from './List'
 import Input from './Input'
 import logo from './logo.svg'
 
-const TOKEN = 'tolkien'
+const TOKEN = 'harley'
 
 class App extends Component {
 
@@ -14,7 +14,14 @@ class App extends Component {
       ]
     }
   }
-
+ componentDidMount () {
+   fetch(`https://one-list-api.herokuapp.com/items?acces_token=${TOKEN}`)
+    .then((resp) => { return resp.json()})
+    .then((data) => {
+      this.setState({ listItems:data })
+      console.log(data)
+    })
+ }
   // add the new list text from Input to the state listItems
   addToList = (newListText) => {
     const newListItems = this.state.listItems
@@ -65,11 +72,18 @@ class App extends Component {
 
   removeItem = (index) => {
     const newListItems = this.state.listItems
+    const item = newListItems[index]
+    fetch(`https://one-list-api.herokuapp.com/items/1?access_token=${TOKEN}`, {
+      method: 'DELETE'
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then(() => {
     newListItems.splice(index, 1)
     this.setState({
       listItems: newListItems
     })
   }
+}
 
   render () {
     return (
