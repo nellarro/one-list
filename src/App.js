@@ -14,23 +14,18 @@ class App extends Component {
       ]
     }
   }
- componentDidMount () {
-   fetch(`https://one-list-api.herokuapp.com/items?acces_token=${TOKEN}`)
-    .then((resp) => { return resp.json()})
-    .then((data) => {
-      this.setState({ listItems:data })
-      console.log(data)
-    })
- }
+  componentDidMount () {
+     fetch(`https://one-list-api.herokuapp.com/items?access_token=${TOKEN}`)
+       .then((resp) => { return resp.json() })
+       .then((data) => {
+         this.setState({ listItems: data })
+         console.log(data)
+       })
+   }
   // add the new list text from Input to the state listItems
   addToList = (newListText) => {
     const newListItems = this.state.listItems
 
-    // REPLACE this:
-    //   newListItems.push({ text: newListText, complete: false })
-    //   this.setState({ listItems: newListItems })
-    //
-    // WITH this:
     fetch(`https://one-list-api.herokuapp.com/items?access_token=${TOKEN}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -51,7 +46,7 @@ class App extends Component {
 
   completeItem = (index) => {
     const newListItems = this.state.listItems
-    const item =newListItems[index]
+    const item = newListItems[index]
     fetch(`https://one-list-api.herokuapp.com/items/${item.id}?access_token=${TOKEN}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -64,7 +59,10 @@ class App extends Component {
     .then((response) => { return response.json() })
     .then((data) => {
       newListItems[index] = data
-
+      this.setState({
+        listItems: newListItems
+      })
+    })
     this.setState({
       listItems: newListItems
     })
@@ -73,17 +71,18 @@ class App extends Component {
   removeItem = (index) => {
     const newListItems = this.state.listItems
     const item = newListItems[index]
-    fetch(`https://one-list-api.herokuapp.com/items/1?access_token=${TOKEN}`, {
-      method: 'DELETE'
+    fetch(`https://one-list-api.herokuapp.com/items/${item.id}?access_token=${TOKEN}`, {
+      method: 'DELETE',
       headers: { 'Content-Type': 'application/json' }
+
     })
     .then(() => {
-    newListItems.splice(index, 1)
-    this.setState({
-      listItems: newListItems
+      newListItems.splice(index, 1)
+      this.setState({
+        listItems: newListItems
+      })
     })
   }
-}
 
   render () {
     return (
